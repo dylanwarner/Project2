@@ -1,9 +1,13 @@
+$backgroundColor: #EAF2F5;
+$buttonColor: #7B6CD9;
+
 html, body {
     height: 100%;
     width: 100%;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+    background-color: $backgroundColor;
 }
 
 #logo {
@@ -116,12 +120,12 @@ nav:nth-child(1) {
     text-align: center;
     margin: 0 auto;
     margin-top: 14px;
-    font-size: 1.2em;
+    font-size: 1em;
     width: 100px;
-    background-color: #55acee;
+    background-color: $buttonColor;
+    border: none;
     border-radius: 2px;
-    border-color: #66acee;
-    padding: 3px 0px;
+    padding: 10px 0px;
     color: white;
     text-decoration: none;
 }
@@ -260,3 +264,4 @@ h3.domoAge {
 .domo:last-child {
     margin-bottom:10px;
 }
+  
