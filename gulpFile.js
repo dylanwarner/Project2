@@ -15,6 +15,7 @@ const babel = require('gulp-babel');
 const sass = require('gulp-sass');
 const nodemon = require('gulp-nodemon');
 const eslint = require('gulp-eslint');
+const concat = require('gulp-concat');
 
 
 // Here we are defining a task to build our SCSS into browser ready css.
@@ -39,7 +40,7 @@ const sassTask = (done) => {
 };
 
 
-// The jsTask is going to transpile our client-side code using babel so
+/* // The jsTask is going to transpile our client-side code using babel so
 // that it is compatible with most web browsers.
 const jsTask = (done) => {
   // Again, we begin by having gulp load in files for us to transpile.
@@ -62,7 +63,32 @@ const jsTask = (done) => {
   // by calling the done callback function.
   done();
 };
+ */
 
+const loginBundleTask = (done) => {
+  // grab multiple files, concat will combine them
+  gulp.src(['./client/client.js', './client/helper.js'])
+
+  .pipe(concat('loginBundle.js')) //Final output file name
+  .pipe(babel({
+    presets: ['@babel/preset-env', '@babel/preset-react']
+  }))
+  .pipe(gulp.dest('./hosted/'));
+  
+  done();
+};
+
+const appBundleTask = (done) => {
+  //Grab multiple files, concat will combine them
+  gulp.src(['./client/maker.js', './client/helper.js'])
+  .pipe(concat('appBundle.js')) //Final output file name
+  .pipe(babel({
+    presets: ['@babel/preset-env', '@babel/preset-react']
+  }))
+  .pipe(gulp.dest('./hosted/'));
+  
+  done();
+};
 
 // Here we are defining a task that will run ESLint on our server code.
 const lintTask = (done) => {
@@ -87,7 +113,7 @@ const lintTask = (done) => {
 // we can create a "build" script that can run them all. Since none of them are
 // reliant on each other, we can have them all run in parallel. After exporting
 // this, we can write a script like our "build" script in package.json.
-module.exports.build = gulp.parallel(sassTask, jsTask, lintTask);
+module.exports.build = gulp.parallel(sassTask, loginBundleTask, appBundleTask, lintTask);
 
 
 // We can also use our above tasks in a watch script. Just like our previous
@@ -101,7 +127,8 @@ const watch = () => {
   
   // We also want it to watch our client side javascript, and if there are any
   // changes, we want it to run the jsTask from above.
-  gulp.watch('./client/*.js', jsTask);
+  gulp.watch(['./client/app/*.js', './client/helper/*.js'], appBundleTask);
+  gulp.watch(['./client/login/*.js', './client/helper/*.js'], loginBundleTask);
   
   // Finally, we want to start up nodemon to restart whenever our code changes.
   // Nodemon will watch EVERY file in our project, and will restart our 'script'

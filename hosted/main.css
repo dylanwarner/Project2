@@ -4,7 +4,7 @@ html, body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  background-color: #EAF2F5; }
+  background-color: white; }
 
 #logo {
   height: 40px;
@@ -16,7 +16,7 @@ html, body {
 nav {
   width: 100%;
   height: 50px;
-  background-color: #55acee; }
+  background-color: #1CAEF2; }
 
 nav:nth-child(1) {
   padding-left: 25px; }
@@ -34,7 +34,7 @@ nav:nth-child(1) {
   text-decoration: none;
   padding: 5px;
   border-radius: 4px;
-  background-color: #55acee;
+  background-color: #1CAEF2;
   transition: background-color 0.4s ease; }
 
 .navlink a:hover {
@@ -82,18 +82,22 @@ nav:nth-child(1) {
   height: 300px;
   width: 350px;
   margin: 0 auto;
-  padding-top: 350px;
-  font-size: 1.2em; }
+  padding-top: 20px;
+  font-size: 1.2em;
+  text-align: center;
+  display: block; }
 
 .mainForm h3 {
   text-align: center; }
 
 .mainForm label {
-  display: inline-block;
-  width: 100px;
+  display: block;
   margin-right: 10px;
-  text-align: right;
-  font-size: 1.2em; }
+  padding-bottom: 15px;
+  font-size: 0.8em;
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+  float: left; }
 
 .formSubmit {
   transition: background-color 0.4s ease;
@@ -101,9 +105,9 @@ nav:nth-child(1) {
   text-align: center;
   margin: 0 auto;
   margin-top: 14px;
-  font-size: 1em;
-  width: 100px;
-  background-color: #7B6CD9;
+  font-size: 0.7em;
+  width: 150px;
+  background-color: #1CAEF2;
   border: none;
   border-radius: 2px;
   padding: 10px 0px;
@@ -115,13 +119,42 @@ nav:nth-child(1) {
 
 .formSubmit:hover {
   transition: background-color 0.4s ease;
-  background-color: #338acc; }
+  cursor: pointer;
+  opacity: 0.8; }
 
 #user, #pass, #pass2 {
-  text-align: center;
-  font-size: 1.1em;
-  width: 180px;
-  border-radius: 6px; }
+  height: 35px;
+  width: 100%;
+  min-width: 100%;
+  padding: 0;
+  border-radius: 0;
+  font-size: 0.8em;
+  font-family: "Roboto", sans-serif;
+  line-height: 70px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  border-bottom: 3px solid lightgray; }
+  #user:focus + .input-highlight, #pass:focus + .input-highlight, #pass2:focus + .input-highlight {
+    border-top: 3px solid #fbc91b; }
+
+.input-highlight {
+  font-size: 0.8em;
+  line-height: 70px;
+  font-family: "Roboto", sans-serif;
+  border-top: 3px solid #30D9A9;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 0;
+  max-width: 100%;
+  color: transparent;
+  user-select: none;
+  overflow: hidden; }
+
+.input-wrapper {
+  margin: 50px auto;
+  position: relative; }
 
 #user:focus, #pass:focus, #pass2:focus {
   outline: none;
@@ -226,3 +259,63 @@ h3.domoAge {
 
 .domo:last-child {
   margin-bottom: 10px; }
+
+.input_div {
+  float: left; }
+
+p {
+  font-size: 0.8em;
+  font-family: "Roboto", sans-serif; }
+
+.signup_link {
+  color: #1CAEF2; }
+
+li {
+  float: right; }
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0; }
+
+.navbar {
+  text-align: center;
+  padding-top: 45px; }
+
+.nav-link {
+  font-weight: bold;
+  font-size: 13px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #031D44;
+  padding: 20px 0px;
+  margin: 0px 20px;
+  display: inline-block;
+  position: relative;
+  opacity: 0.75; }
+
+.nav-link:hover {
+  opacity: 1; }
+
+.nav-link::before {
+  transition: 300ms;
+  height: 3px;
+  content: "";
+  position: absolute;
+  background-color: #1CAEF2; }
+
+.nav-link-ltr::before {
+  width: 0%;
+  bottom: 10px; }
+
+.nav-link-ltr {
+  font-family: "Roboto", sans-serif;
+  font-size: 0.9em; }
+
+.nav-link-ltr:hover::before {
+  width: 100%; }
+
+h1 {
+  font-family: "Roboto", sans-serif;
+  text-align: center;
+  padding-top: 25px; }

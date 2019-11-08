@@ -1,5 +1,8 @@
-$backgroundColor: #EAF2F5;
-$buttonColor: #7B6CD9;
+$backgroundColor: white;
+$buttonColor: #1CAEF2;
+$input-font-size: 0.8em;
+$input-line-height: 70px;
+$font-family: 'Roboto', sans-serif;
 
 html, body {
     height: 100%;
@@ -21,7 +24,7 @@ html, body {
 nav {
     width: 100%;
     height: 50px;
-    background-color: #55acee;
+    background-color: $buttonColor;
 }
 
 nav:nth-child(1) {
@@ -42,7 +45,7 @@ nav:nth-child(1) {
     text-decoration: none;
     padding: 5px;
     border-radius: 4px;
-    background-color: #55acee;
+    background-color: $buttonColor;
     transition: background-color 0.4s ease;
 }
 
@@ -72,7 +75,7 @@ nav:nth-child(1) {
 }
 
 .domoForm input[type=text] {
-    float:left;
+    float: left;
 }
 
 .makeDomoSubmit {
@@ -98,8 +101,10 @@ nav:nth-child(1) {
     height: 300px;
     width: 350px;
     margin: 0 auto;
-    padding-top: 350px;
+    padding-top: 20px;
     font-size: 1.2em;
+    text-align: center;
+    display: block;
 }
 
 .mainForm h3 {
@@ -107,11 +112,13 @@ nav:nth-child(1) {
 }
 
 .mainForm label {
-    display: inline-block;
-    width: 100px;
+    display: block;
     margin-right: 10px;
-    text-align: right;
-    font-size: 1.2em;
+    padding-bottom: 15px;
+    font-size: 0.8em;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    float: left;
 }
 
 .formSubmit {
@@ -120,8 +127,8 @@ nav:nth-child(1) {
     text-align: center;
     margin: 0 auto;
     margin-top: 14px;
-    font-size: 1em;
-    width: 100px;
+    font-size: 0.7em;
+    width: 150px;
     background-color: $buttonColor;
     border: none;
     border-radius: 2px;
@@ -136,14 +143,49 @@ nav:nth-child(1) {
 
 .formSubmit:hover {
     transition: background-color 0.4s ease;
-    background-color: #338acc;
+    cursor: pointer;
+    opacity: 0.8;
 }
 
 #user, #pass, #pass2 {
-    text-align: center;
-    font-size: 1.1em;
-    width: 180px;
-    border-radius: 6px;
+    height: 35px;
+    width: 100%;
+    min-width: 100%;
+    padding: 0;
+    border-radius: 0;
+    font-size: $input-font-size;
+    font-family: $font-family;
+    line-height: $input-line-height;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    border-bottom: 3px solid lightgray;
+
+    &:focus {
+        + .input-highlight {
+        border-top: 3px solid #fbc91b;
+    }
+    }
+}
+
+.input-highlight {
+    font-size: $input-font-size;
+    line-height: $input-line-height;
+    font-family: $font-family;
+    border-top: 3px solid #30D9A9;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 0;
+    max-width: 100%;
+    color: transparent;
+    user-select: none;
+    overflow: hidden;
+}
+
+.input-wrapper {
+    margin: 50px auto;
+    position: relative;
 }
 
 #user:focus, #pass:focus, #pass2:focus {
@@ -263,5 +305,78 @@ h3.domoAge {
 
 .domo:last-child {
     margin-bottom:10px;
+}
+
+.input_div {
+    float: left;
+}
+
+p {
+    font-size: 0.8em;
+    font-family: $font-family;
+}
+
+.signup_link {
+    color: $buttonColor;
+}
+
+li {
+    float: right;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    text-align: center;
+    padding-top: 45px;
+}
+
+.nav-link {
+    font-weight: bold;
+    font-size: 13px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #031D44;
+    padding: 20px 0px;
+    margin: 0px 20px;
+    display: inline-block;
+    position: relative;
+    opacity: 0.75;
+}
+
+.nav-link:hover {
+    opacity: 1;
+}
+  
+.nav-link::before {
+    transition: 300ms;
+    height: 3px;
+    content: "";
+    position: absolute;
+    background-color: $buttonColor;
+}
+  
+.nav-link-ltr::before {
+    width: 0%;
+    bottom: 10px;
+}
+
+.nav-link-ltr {
+    font-family: $font-family;
+    font-size: 0.9em;
+}
+
+.nav-link-ltr:hover::before {
+    width: 100%;
+}
+
+h1 {
+    font-family: $font-family;
+    text-align: center;
+    padding-top: 25px;
 }
   
