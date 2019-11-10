@@ -1,99 +1,95 @@
 "use strict";
 
-var handleDomo = function handleDomo(e) {
+var handleNote = function handleNote(e) {
   e.preventDefault();
-  $("#domoMessage").animate({
+  $("#errorAlert").animate({
     width: 'hide'
   }, 350);
 
-  if ($("#domoName").val() == '' || $("#domoAge").val() == '') {
-    handleError("RAWR! All fields are required");
+  if ($("#noteTitle").val() == '' || $("#note").val() == '') {
+    handleError("All fields are required.");
     return false;
   }
 
-  sendAjax('POST', $("#domoForm").attr("action"), $("#domoForm").serialize(), function () {
-    loadDomosFromServer();
+  sendAjax('POST', $("#noteForm").attr("action"), $("#noteForm").serialize(), function () {
+    loadNotesFromServer();
   });
   return false;
 };
 
-var DomoForm = function DomoForm(props) {
+var NoteForm = function NoteForm(props) {
   return React.createElement("form", {
-    id: "domoForm",
-    onSubmit: handleDomo,
-    name: "domoForm",
+    id: "noteForm",
+    onSubmit: handleNote,
+    name: "noteForm",
     action: "/maker",
     method: "POST",
-    className: "domoForm"
+    className: "noteForm"
   }, React.createElement("label", {
-    htmlFor: "name"
-  }, "Name: "), React.createElement("input", {
-    id: "domoName",
+    htmlFor: "title"
+  }, "Title: "), React.createElement("input", {
+    id: "noteTitle",
     type: "text",
-    name: "name",
-    placeholder: "Domo Name"
+    name: "title",
+    placeholder: "Title"
   }), React.createElement("label", {
-    htmlFor: "age"
-  }, "Age: "), React.createElement("input", {
-    id: "domoAge",
+    htmlFor: "note"
+  }, "Note: "), React.createElement("input", {
+    id: "note",
     type: "text",
-    name: "age",
-    placeholder: "Domo Age"
+    name: "note",
+    placeholder: "Note"
   }), React.createElement("input", {
     type: "hidden",
     name: "_csrf",
     value: props.csrf
   }), React.createElement("input", {
-    className: "makeDomoSubmit",
+    className: "makeNoteSubmit",
     type: "submit",
-    value: "Make Domo"
+    value: "+"
   }));
 };
 
-var DomoList = function DomoList(props) {
-  if (props.domos.length === 0) {
+var NoteList = function NoteList(props) {
+  if (props.notes.length === 0) {
     return React.createElement("div", {
-      className: "domoList"
+      className: "noteList"
     }, React.createElement("h3", {
-      className: "emptyDomo"
-    }, "No Domos yet"));
+      className: "emptyNote"
+    }, "No notes yet."));
   }
 
-  var domoNodes = props.domos.map(function (domo) {
+  var noteNodes = props.notes.map(function (note) {
     return React.createElement("div", {
-      key: domo._id,
-      className: "domo"
-    }, React.createElement("img", {
-      src: "/assets/img/domoface.jpeg",
-      alt: "domo face",
-      className: "domoFace"
-    }), React.createElement("h3", {
-      className: "domoName"
-    }, "Name: ", domo.name, " "), React.createElement("h3", {
-      className: "domoAge"
-    }, "Age: ", domo.age, " "));
+      key: note._id,
+      className: "note"
+    }, React.createElement("h3", {
+      className: "noteTitle"
+    }, " ", note.title, " "), React.createElement("p", {
+      className: "noteNote"
+    }, " ", note.note, " "));
   });
   return React.createElement("div", {
-    className: "domoList"
-  }, domoNodes);
+    className: "noteList"
+  }, noteNodes);
 };
 
-var loadDomosFromServer = function loadDomosFromServer() {
-  sendAjax('GET', '/getDomos', null, function (data) {
-    ReactDOM.render(React.createElement(DomoList, {
-      domos: data.domos
-    }), document.querySelector("#domos"));
+var loadNotesFromServer = function loadNotesFromServer() {
+  sendAjax('GET', '/getNotes', null, function (data) {
+    ReactDOM.render(React.createElement(NoteList, {
+      notes: data.notes
+    }), document.querySelector("#notes"));
   });
 };
 
 var setup = function setup(csrf) {
-  ReactDOM.render(React.createElement(DomoForm, {
+  ReactDOM.render(React.createElement(NoteForm, {
     csrf: csrf
-  }), document.querySelector("#makeDomo"));
-  ReactDOM.render(React.createElement(DomoList, {
-    domos: []
-  }), document.querySelector("#domos"));
-  loadDomosFromServer();
+  }), document.querySelector("#makeNote"));
+  ReactDOM.render(React.createElement(NoteList, {
+    notes: []
+  }), document.querySelector("#notes"));
+  loadNotesFromServer();
 };
 
 var getToken = function getToken() {
@@ -107,15 +103,29 @@ $(document).ready(function () {
 });
 
 var handleError = function handleError(message) {
-  $("#errorMessage").text(message);
-  $("#domoMessage").animate({
+  $(".alertMsg").text(message);
+  $("#errorAlert").animate({
+    width: 'toggle'
+  }, 350);
+};
+
+var handleErrorSign = function handleErrorSign(message) {
+  $(".alertMsgSign").text(message);
+  $("#errorAlertSign").animate({
     width: 'toggle'
   }, 350);
 };
 
 var redirect = function redirect(response) {
-  $("#domoMessage").animate({
-    width: 'hide'
+  $(".alertMsg").animate({
+    width: 'toggle'
+  }, 350);
+  window.location = response.redirect;
+};
+
+var redirectSign = function redirectSign(response) {
+  $(".alertMsgSign").animate({
+    width: 'toggle'
   }, 350);
   window.location = response.redirect;
 };
@@ -131,6 +141,21 @@ var sendAjax = function sendAjax(type, action, data, success) {
     error: function error(xhr, status, _error) {
       var messageObj = JSON.parse(xhr.responseText);
       handleError(messageObj.error);
+    }
+  });
+};
+
+var sendAjaxSignUp = function sendAjaxSignUp(type, action, data, success) {
+  $.ajax({
+    cache: false,
+    type: type,
+    url: action,
+    data: data,
+    dataType: "json",
+    success: success,
+    error: function error(xhr, status, _error2) {
+      var messageObj = JSON.parse(xhr.responseText);
+      handleErrorSign(messageObj.error);
     }
   });
 };

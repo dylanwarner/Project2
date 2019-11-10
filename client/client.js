@@ -1,10 +1,10 @@
 const handleLogin = (e) => {
     e.preventDefault();
 
-    $("#domoMessage").animate({width:'hide'},350);
+    $("#errorAlert").animate({width:'hide'},350);
 
     if($("#user").val() == '' || $("#pass").val() == '') {
-        handleError("RAWR! Username or password is empty");
+        handleError("Username or password is empty.");
         return false;
     }
 
@@ -18,19 +18,19 @@ const handleLogin = (e) => {
 const handleSignup = (e) => {
     e.preventDefault();
 
-    $("#domoMessage").animate({width:'hide'},350);
+    $("#errorAlertSign").animate({width:'hide'},350);
 
     if($("#user").val() == '' || $("#pass").val() == '' || $("#pass2").val() == '') {
-        handleError("RAWR! All fields are required");
+        handleErrorSign("All fields are required.");
         return false;
     }
 
     if($("#pass").val() !== $("#pass2").val()) {
-        handleError("RAWR! Passwords do not match");
+        handleErrorSign("Passwords do not match.");
         return false;
     }
 
-    sendAjax('POST', $("#signupForm").attr("action"), $("#signupForm").serialize(), redirect);
+    sendAjaxSignUp('POST', $("#signupForm").attr("action"), $("#signupForm").serialize(), redirectSign);
     
     return false;
 };
@@ -76,22 +76,20 @@ class LoginWindow extends React.Component {
         >
         <div className="input-wrapper">
         <label className="loginLabels" htmlFor="username">Username </label>
-        <input onChange={this.onInputChange} id="user" type="text" name="username" placeholder="username" value={inputValue}/>
+        <input onChange={this.onInputChange} id="user" type="text" name="username" placeholder="Username" value={inputValue}/>
         <span className='input-highlight'>
         { inputValue.replace(/ /g, "\u00a0") }
         </span>
         </div>
         <div className="input-wrapper">
         <label className="loginLabels" htmlFor="pass">Password </label>
-        <input onChange={this.onInputChange2} id="pass" type="text" name="pass" placeholder="password" value={passValue}/>
+        <input onChange={this.onInputChange2} id="pass" type="text" name="pass" placeholder="Password" value={passValue}/>
         <span className='input-highlight'>
         { passValue.replace(/ /g, "\u00a0") }
         </span>
         <input type="hidden" name="_csrf" value={this.state.csrf}/>
         </div>
         <input className="formSubmit" type="submit" value="Login" />
-        <br></br>
-        <p>New User? <a id="signupLink" href="/signup"><span className="signup_link"> Signup </span></a></p>
         </form>
     );
     }
@@ -150,29 +148,27 @@ class SignupWindow extends React.Component {
         
         <div className="input-wrapper">
         <label htmlFor="username">Username </label>
-        <input onChange={this.onInputChange} id="user" type="text" name='username' placeholder="username" value={inputValue}/>
+        <input onChange={this.onInputChange} id="user" type="text" name='username' placeholder="Username" value={inputValue}/>
         <span className='input-highlight'>
         { inputValue.replace(/ /g, "\u00a0") }
         </span>
         </div>
         <div className="input-wrapper">
         <label htmlFor="pass">Password </label>
-        <input onChange={this.onInputChange2} id="pass" type="text" name="pass" placeholder="password" value={passValue}/>
+        <input onChange={this.onInputChange2} id="pass" type="text" name="pass" placeholder="Password" value={passValue}/>
         <span className='input-highlight'>
         { passValue.replace(/ /g, "\u00a0") }
         </span>
         </div>
         <div className="input-wrapper">
         <label htmlFor="pass2">Password </label>
-        <input onChange={this.onInputChange3} id="pass2" type="text" name="pass2" placeholder="retype password" value={passTwoValue}/>
+        <input onChange={this.onInputChange3} id="pass2" type="text" name="pass2" placeholder="Confirm Password" value={passTwoValue}/>
         <span className='input-highlight'>
         { passTwoValue.replace(/ /g, "\u00a0") }
         </span>
         </div>
         <input type="hidden" name="_csrf" value={this.state.csrf} />
         <input className="formSubmit" type="submit" value="Sign Up" />
-        <br></br>
-        <p>Already have an account? <span className="signup_link"> Login </span></p>
         </form>
     );
     }
@@ -195,17 +191,20 @@ const createSignupWindow = (csrf) => {
 const setup = (csrf) => {
     const loginButton = document.querySelector("#loginButton");
     const signupButton = document.querySelector("#signupButton");
-    const signupLink = document.querySelector('#signupLink');
+    const errorAlert = document.querySelector("#errorAlert");
+    const errorAlertSign = document.querySelector("#errorAlertSign");
 
     signupButton.addEventListener("click", (e) => {
         e.preventDefault();
         createSignupWindow(csrf);
+        errorAlert.style.display = "none";
         return false;
     });
 
     loginButton.addEventListener("click", (e) => {
         e.preventDefault();
         createLoginWindow(csrf);
+        errorAlertSign.style.display = "none";
         return false;
     });
 

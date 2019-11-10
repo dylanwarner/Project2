@@ -20,12 +20,12 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 var handleLogin = function handleLogin(e) {
   e.preventDefault();
-  $("#domoMessage").animate({
+  $("#errorAlert").animate({
     width: 'hide'
   }, 350);
 
   if ($("#user").val() == '' || $("#pass").val() == '') {
-    handleError("RAWR! Username or password is empty");
+    handleError("Username or password is empty.");
     return false;
   }
 
@@ -36,21 +36,21 @@ var handleLogin = function handleLogin(e) {
 
 var handleSignup = function handleSignup(e) {
   e.preventDefault();
-  $("#domoMessage").animate({
+  $("#errorAlertSign").animate({
     width: 'hide'
   }, 350);
 
   if ($("#user").val() == '' || $("#pass").val() == '' || $("#pass2").val() == '') {
-    handleError("RAWR! All fields are required");
+    handleErrorSign("All fields are required.");
     return false;
   }
 
   if ($("#pass").val() !== $("#pass2").val()) {
-    handleError("RAWR! Passwords do not match");
+    handleErrorSign("Passwords do not match.");
     return false;
   }
 
-  sendAjax('POST', $("#signupForm").attr("action"), $("#signupForm").serialize(), redirect);
+  sendAjaxSignUp('POST', $("#signupForm").attr("action"), $("#signupForm").serialize(), redirectSign);
   return false;
 };
 
@@ -113,7 +113,7 @@ function (_React$Component) {
         id: "user",
         type: "text",
         name: "username",
-        placeholder: "username",
+        placeholder: "Username",
         value: inputValue
       }), React.createElement("span", {
         className: "input-highlight"
@@ -127,7 +127,7 @@ function (_React$Component) {
         id: "pass",
         type: "text",
         name: "pass",
-        placeholder: "password",
+        placeholder: "Password",
         value: passValue
       }), React.createElement("span", {
         className: "input-highlight"
@@ -139,12 +139,7 @@ function (_React$Component) {
         className: "formSubmit",
         type: "submit",
         value: "Login"
-      }), React.createElement("br", null), React.createElement("p", null, "New User? ", React.createElement("a", {
-        id: "signupLink",
-        href: "/signup"
-      }, React.createElement("span", {
-        className: "signup_link"
-      }, " Signup "))));
+      }));
     }
   }]);
 
@@ -220,7 +215,7 @@ function (_React$Component2) {
         id: "user",
         type: "text",
         name: "username",
-        placeholder: "username",
+        placeholder: "Username",
         value: inputValue
       }), React.createElement("span", {
         className: "input-highlight"
@@ -233,7 +228,7 @@ function (_React$Component2) {
         id: "pass",
         type: "text",
         name: "pass",
-        placeholder: "password",
+        placeholder: "Password",
         value: passValue
       }), React.createElement("span", {
         className: "input-highlight"
@@ -246,7 +241,7 @@ function (_React$Component2) {
         id: "pass2",
         type: "text",
         name: "pass2",
-        placeholder: "retype password",
+        placeholder: "Confirm Password",
         value: passTwoValue
       }), React.createElement("span", {
         className: "input-highlight"
@@ -258,9 +253,7 @@ function (_React$Component2) {
         className: "formSubmit",
         type: "submit",
         value: "Sign Up"
-      }), React.createElement("br", null), React.createElement("p", null, "Already have an account? ", React.createElement("span", {
-        className: "signup_link"
-      }, " Login ")));
+      }));
     }
   }]);
 
@@ -284,15 +277,18 @@ var createSignupWindow = function createSignupWindow(csrf) {
 var setup = function setup(csrf) {
   var loginButton = document.querySelector("#loginButton");
   var signupButton = document.querySelector("#signupButton");
-  var signupLink = document.querySelector('#signupLink');
+  var errorAlert = document.querySelector("#errorAlert");
+  var errorAlertSign = document.querySelector("#errorAlertSign");
   signupButton.addEventListener("click", function (e) {
     e.preventDefault();
     createSignupWindow(csrf);
+    errorAlert.style.display = "none";
     return false;
   });
   loginButton.addEventListener("click", function (e) {
     e.preventDefault();
     createLoginWindow(csrf);
+    errorAlertSign.style.display = "none";
     return false;
   });
   createLoginWindow(csrf); // default view
@@ -309,15 +305,29 @@ $(document).ready(function () {
 });
 
 var handleError = function handleError(message) {
-  $("#errorMessage").text(message);
-  $("#domoMessage").animate({
+  $(".alertMsg").text(message);
+  $("#errorAlert").animate({
+    width: 'toggle'
+  }, 350);
+};
+
+var handleErrorSign = function handleErrorSign(message) {
+  $(".alertMsgSign").text(message);
+  $("#errorAlertSign").animate({
     width: 'toggle'
   }, 350);
 };
 
 var redirect = function redirect(response) {
-  $("#domoMessage").animate({
-    width: 'hide'
+  $(".alertMsg").animate({
+    width: 'toggle'
+  }, 350);
+  window.location = response.redirect;
+};
+
+var redirectSign = function redirectSign(response) {
+  $(".alertMsgSign").animate({
+    width: 'toggle'
   }, 350);
   window.location = response.redirect;
 };
@@ -333,6 +343,21 @@ var sendAjax = function sendAjax(type, action, data, success) {
     error: function error(xhr, status, _error) {
       var messageObj = JSON.parse(xhr.responseText);
       handleError(messageObj.error);
+    }
+  });
+};
+
+var sendAjaxSignUp = function sendAjaxSignUp(type, action, data, success) {
+  $.ajax({
+    cache: false,
+    type: type,
+    url: action,
+    data: data,
+    dataType: "json",
+    success: success,
+    error: function error(xhr, status, _error2) {
+      var messageObj = JSON.parse(xhr.responseText);
+      handleErrorSign(messageObj.error);
     }
   });
 };

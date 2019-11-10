@@ -127,8 +127,8 @@ const watch = () => {
   
   // We also want it to watch our client side javascript, and if there are any
   // changes, we want it to run the jsTask from above.
-  gulp.watch(['./client/app/*.js', './client/helper/*.js'], appBundleTask);
-  gulp.watch(['./client/login/*.js', './client/helper/*.js'], loginBundleTask);
+  gulp.watch(['./client/maker.js', './client/helper.js'], appBundleTask);
+  gulp.watch(['./client/client.js', './client/helper.js'], loginBundleTask);
   
   // Finally, we want to start up nodemon to restart whenever our code changes.
   // Nodemon will watch EVERY file in our project, and will restart our 'script'
