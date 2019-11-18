@@ -1,6 +1,8 @@
+// require controllers and middleware
 const controllers = require('./controllers');
 const mid = require('./middleware');
 
+// routes for each page with middleware
 const router = (app) => {
   app.get('/getToken', mid.requiresSecure, controllers.Account.getToken);
   app.get('/getNotes', mid.requiresLogin, controllers.Note.getNotes);
@@ -13,4 +15,5 @@ const router = (app) => {
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };
 
+// export router
 module.exports = router;

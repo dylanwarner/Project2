@@ -18,41 +18,49 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
+// function to handle logins
 var handleLogin = function handleLogin(e) {
-  e.preventDefault();
+  e.preventDefault(); // animate error msg alert
+
   $("#errorAlert").animate({
     width: 'hide'
-  }, 350);
+  }, 350); // if user and password are empty, display error
 
   if ($("#user").val() == '' || $("#pass").val() == '') {
     handleError("Username or password is empty.");
     return false;
   }
 
-  console.log($("input[name=_csrf]").val());
+  console.log($("input[name=_csrf]").val()); // if no errors send post with login form info and redirect 
+
   sendAjax('POST', $("#loginForm").attr("action"), $("#loginForm").serialize(), redirect);
   return false;
-};
+}; // function to handle signup 
+
 
 var handleSignup = function handleSignup(e) {
-  e.preventDefault();
+  e.preventDefault(); // animate error msg alert
+
   $("#errorAlertSign").animate({
     width: 'hide'
-  }, 350);
+  }, 350); // if username, password 1, and password 2 are empty - show error msg
 
   if ($("#user").val() == '' || $("#pass").val() == '' || $("#pass2").val() == '') {
     handleErrorSign("All fields are required.");
     return false;
-  }
+  } // if password 1 does not match password 2 - show error
+
 
   if ($("#pass").val() !== $("#pass2").val()) {
     handleErrorSign("Passwords do not match.");
     return false;
-  }
+  } // if no errors send post with signup form info and redirect
+
 
   sendAjaxSignUp('POST', $("#signupForm").attr("action"), $("#signupForm").serialize(), redirectSign);
   return false;
-};
+}; // react class for creating login window
+
 
 var LoginWindow =
 /*#__PURE__*/
@@ -64,12 +72,14 @@ function (_React$Component) {
 
     _classCallCheck(this, LoginWindow);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(LoginWindow).call(this, props));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(LoginWindow).call(this, props)); // state
+
     _this.state = {
       inputValue: '',
       passValue: '',
       csrf: props.csrf
-    };
+    }; // on input change - bind values (for color underline)
+
     _this.onInputChange = _this.onInputChange.bind(_assertThisInitialized(_this));
     _this.onInputChange2 = _this.onInputChange2.bind(_assertThisInitialized(_this));
     return _this;
@@ -77,6 +87,9 @@ function (_React$Component) {
 
   _createClass(LoginWindow, [{
     key: "onInputChange",
+    // these two methods are used for creating the colored underline on the login and signup windows
+    // on first input change set state of the first input
+    // source is on the login.handlebars page
     value: function onInputChange(e) {
       var value = e.target.value;
       this.setState({
@@ -85,6 +98,7 @@ function (_React$Component) {
     }
   }, {
     key: "onInputChange2",
+    // on second input chnage set state of the second input
     value: function onInputChange2(e) {
       var value = e.target.value;
       this.setState({
@@ -93,9 +107,12 @@ function (_React$Component) {
     }
   }, {
     key: "render",
+    // render the login form
     value: function render() {
+      // set the state for the input value and pass value
       var inputValue = this.state.inputValue;
-      var passValue = this.state.passValue;
+      var passValue = this.state.passValue; // return the login form
+
       return React.createElement("form", {
         id: "loginForm",
         name: "loginForm",
@@ -144,7 +161,8 @@ function (_React$Component) {
   }]);
 
   return LoginWindow;
-}(React.Component);
+}(React.Component); // class to display signup window
+
 
 var SignupWindow =
 /*#__PURE__*/
@@ -156,13 +174,15 @@ function (_React$Component2) {
 
     _classCallCheck(this, SignupWindow);
 
-    _this2 = _possibleConstructorReturn(this, _getPrototypeOf(SignupWindow).call(this, props));
+    _this2 = _possibleConstructorReturn(this, _getPrototypeOf(SignupWindow).call(this, props)); // state variables
+
     _this2.state = {
       inputValue: '',
       passValue: '',
       passTwoValue: '',
       csrf: props.csrf
-    };
+    }; // on input changes bind the state - for color underlines
+
     _this2.onInputChange = _this2.onInputChange.bind(_assertThisInitialized(_this2));
     _this2.onInputChange2 = _this2.onInputChange2.bind(_assertThisInitialized(_this2));
     _this2.onInputChange3 = _this2.onInputChange3.bind(_assertThisInitialized(_this2));
@@ -171,6 +191,8 @@ function (_React$Component2) {
 
   _createClass(SignupWindow, [{
     key: "onInputChange",
+    // these two methods are for handling the input changes on the form fields to create color underlines
+    // source is on the login.handlebars page
     value: function onInputChange(e) {
       var value = e.target.value;
       this.setState({
@@ -195,7 +217,9 @@ function (_React$Component2) {
     }
   }, {
     key: "render",
+    // render the signup form
     value: function render() {
+      // set state variables
       var inputValue = this.state.inputValue;
       var passValue = this.state.passValue;
       var passTwoValue = this.state.passTwoValue;
@@ -260,77 +284,89 @@ function (_React$Component2) {
   return SignupWindow;
 }(React.Component);
 
-;
+; // method to create and render the login window passing in csrf
 
 var createLoginWindow = function createLoginWindow(csrf) {
   ReactDOM.render(React.createElement(LoginWindow, {
     csrf: csrf
   }), document.querySelector('#content'));
-};
+}; // method to create and render the signup window passing in csrf
+
 
 var createSignupWindow = function createSignupWindow(csrf) {
   ReactDOM.render(React.createElement(SignupWindow, {
     csrf: csrf
   }), document.querySelector("#content"));
-};
+}; // function to setup views
+
 
 var setup = function setup(csrf) {
+  // grab the nav buttons and alerts
   var loginButton = document.querySelector("#loginButton");
   var signupButton = document.querySelector("#signupButton");
   var errorAlert = document.querySelector("#errorAlert");
-  var errorAlertSign = document.querySelector("#errorAlertSign");
+  var errorAlertSign = document.querySelector("#errorAlertSign"); // add listener to signup button - create the signup window and get rid of error alert
+
   signupButton.addEventListener("click", function (e) {
     e.preventDefault();
     createSignupWindow(csrf);
     errorAlert.style.display = "none";
     return false;
-  });
+  }); // add listener to login button - create the login window and get rid of the error alert 
+
   loginButton.addEventListener("click", function (e) {
     e.preventDefault();
     createLoginWindow(csrf);
     errorAlertSign.style.display = "none";
     return false;
-  });
+  }); // default window is the login
+
   createLoginWindow(csrf); // default view
-};
+}; // method to get token
+
 
 var getToken = function getToken() {
   sendAjax('GET', '/getToken', null, function (result) {
     setup(result.csrfToken);
   });
-};
+}; // document ready, call get token
+
 
 $(document).ready(function () {
   getToken();
-});
+}); // function to handle error and display error msg
 
 var handleError = function handleError(message) {
   $(".alertMsg").text(message);
   $("#errorAlert").animate({
     width: 'toggle'
   }, 350);
-};
+}; // function to handle error msg on signup window
+
 
 var handleErrorSign = function handleErrorSign(message) {
   $(".alertMsgSign").text(message);
   $("#errorAlertSign").animate({
     width: 'toggle'
   }, 350);
-};
+}; // redirect function to reload window and animate alert
+
 
 var redirect = function redirect(response) {
   $(".alertMsg").animate({
     width: 'toggle'
   }, 350);
   window.location = response.redirect;
-};
+}; // redirect function to signup page to load another window
+
 
 var redirectSign = function redirectSign(response) {
   $(".alertMsgSign").animate({
     width: 'toggle'
   }, 350);
   window.location = response.redirect;
-};
+}; // function to send ajax for login window, and to handle any errors
+
 
 var sendAjax = function sendAjax(type, action, data, success) {
   $.ajax({
@@ -345,7 +381,8 @@ var sendAjax = function sendAjax(type, action, data, success) {
       handleError(messageObj.error);
     }
   });
-};
+}; // function to send ajax for signup window, and to handle any errors
+
 
 var sendAjaxSignUp = function sendAjaxSignUp(type, action, data, success) {
   $.ajax({

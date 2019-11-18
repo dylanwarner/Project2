@@ -1,3 +1,5 @@
+// middleware functions for determining redirects based on if user
+// is logged in, if user has logged out, if https is used, etc.
 const requiresLogin = (req, res, next) => {
   if (!req.session.account) {
     return res.redirect('/');

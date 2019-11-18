@@ -8,17 +8,21 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.6.2/remarkable.min.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Muli&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Karla&display=swap" rel="stylesheet">
   <!-- <link rel="shortcut icon" href="/assets/img/favicon.png"/> -->
   <link rel="stylesheet" type="text/css" href="/assets/main.css"/>
 </head>
 <body>
   <nav id="navnav">
-    <a class="nav-link nav-link-ltr" href="/logout">Logout</a>
+    <a class="logout" href="/logout">Logout</a>
   </nav>
   <div class="navbar">
-    <a id="loginButton" class="nav-link nav-link-ltr" href="/maker">Notes</a>
+    <a id="loginButton" class="nav-link nav-link-ltr" href="/maker">My Notes</a>
+    <a id="addNoteButton" class="nav-link nav-link-ltr" href="/maker">Add Note</a>
+    <a id="profileButton" class="nav-link nav-link-ltr" href="/maker">Profile</a>
   </div>
-  <section id="makeNote">
+  <section id="notes">
   </section>
   <div id="alertWrapper">
   <div id="errorAlert">
@@ -26,8 +30,6 @@
     <p class="alertMsg">Wrong username or password.</p>
   </div>
   </div>
-  <section id="notes">
-  </section>
   <script src="/assets/appBundle.js"></script>
 </body>
 </html>

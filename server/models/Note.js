@@ -1,7 +1,10 @@
+// require mongoose
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
+// require underscore
 const _ = require('underscore');
 
+// create empty nodeModel object
 let NoteModel = {};
 
 // mongoose.Types.ObjectID is a function that
@@ -9,6 +12,7 @@ let NoteModel = {};
 const convertId = mongoose.Types.ObjectId;
 const setTitle = (title) => _.escape(title).trim();
 
+// create a schema for each note
 const NoteSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -32,20 +36,24 @@ const NoteSchema = new mongoose.Schema({
   },
 });
 
+// take noteschmea to an api
 NoteSchema.statics.toAPI = (doc) => ({
   title: doc.title,
   note: doc.note,
 });
 
+// find by owner method by id
 NoteSchema.statics.findByOwner = (ownerId, callback) => {
   const search = {
     owner: convertId(ownerId),
   };
 
-  return NoteModel.find(search).select('title note').exec(callback);
+  // select title note and date 
+  return NoteModel.find(search).select('title note createdData').exec(callback);
 };
 
 NoteModel = mongoose.model('Note', NoteSchema);
 
+// exports
 module.exports.NoteModel = NoteModel;
 module.exports.NoteSchema = NoteSchema;

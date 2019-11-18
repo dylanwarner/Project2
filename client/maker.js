@@ -1,13 +1,17 @@
+// function to handle a note
 const handleNote = (e) => {
     e.preventDefault();
 
+    // animate error alert msg
     $("#errorAlert").animate({width:'hide'},350);
 
+    // if note title and note values are empty, show error
     if($("#noteTitle").val() == '' || $("#note").val() == '') {
         handleError("All fields are required.");
         return false;
     }
 
+    // if no errors, send post and redirect
     sendAjax('POST', $("#noteForm").attr("action"), $("#noteForm").serialize(), function() {
         loadNotesFromServer();
     });
@@ -15,8 +19,10 @@ const handleNote = (e) => {
     return false;
 };
 
+// render the add note form to the page
 const NoteForm = (props) => {
     return (
+        <div id="noteFormWrap">
         <form id="noteForm"
             onSubmit={handleNote}
             name="noteForm"
@@ -29,11 +35,38 @@ const NoteForm = (props) => {
         <label htmlFor="note">Note: </label>
         <input id="note" type="text" name="note" placeholder="Note"/>
         <input type="hidden" name="_csrf" value={props.csrf} />
-        <input className="makeNoteSubmit" type="submit" value="+" />
+        <input className="makeNoteSubmit" type="submit" value="Add note" />
         </form>
+        </div>
     );
 };
 
+// render the profile window to the page
+const ProfileWindow = (props) => {
+    return (
+        <div id="profileWindow">
+            <h2>Hi </h2>
+        </div>
+    );
+}
+
+// function to create the add note window passing in csrf
+const createAddNoteWindow = (csrf) => {
+    ReactDOM.render(
+        <NoteForm csrf={csrf} />,
+        document.querySelector("#notes")
+    );
+};
+
+// function to render the profile window passing in csrf
+const createProfileWindow = (csrf) => {
+    ReactDOM.render(
+        <ProfileWindow csrf={csrf} />,
+        document.querySelector("#notes")
+    );
+}
+
+// function to create the empty notelist if no notes have been create, display the msg
 const NoteList = function(props) {
     if(props.notes.length === 0) {
         return (
@@ -43,15 +76,18 @@ const NoteList = function(props) {
         );
     }
 
+    // if there are notes, loop through and create each note 
     const noteNodes = props.notes.map(function(note) {
         return (
             <div key={note._id} className="note">
                 <h3 className="noteTitle"> {note.title} </h3>
                 <p className="noteNote"> {note.note} </p>
+                <p className="noteDate"> {note.createdData} </p>
             </div>
         );
     });
 
+    // return each note 
     return (
         <div className="noteList">
             {noteNodes}
@@ -59,6 +95,7 @@ const NoteList = function(props) {
     );
 };
 
+// method to load the notes from the server
 const loadNotesFromServer = () => {
     sendAjax('GET', '/getNotes', null, (data) => {
         ReactDOM.render(
@@ -67,24 +104,48 @@ const loadNotesFromServer = () => {
     });
 };
 
+// setup function to setup windows and handle navigation
 const setup = function(csrf) {
-    ReactDOM.render(
-        <NoteForm csrf={csrf} />, document.querySelector("#makeNote")
-    );
 
+    // grab the buttons for add note and profile windows
+    const addNoteButton = document.querySelector('#addNoteButton');
+    const profileButton = document.querySelector('#profileButton');
+    
+    // add listener to the add note onclick to create the add note window
+    addNoteButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        createAddNoteWindow(csrf);
+        return false;
+    });
+
+    // add listener to the profile window to create the profile window
+    profileButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        createProfileWindow(csrf);
+        return false;
+    });
+    //ReactDOM.render(
+        //<NoteForm csrf={csrf} />, document.querySelector("#makeNote")
+    //);
+
+    // render the list of notes empty at first
     ReactDOM.render(
         <NoteList notes={[]} />, document.querySelector("#notes")
     );
 
+    // load the notes from the server
     loadNotesFromServer();
 };
 
+
+// function to get csrf token
 const getToken = () => {
     sendAjax('GET', '/getToken', null, (result) => {
         setup(result.csrfToken);
     });
 };
 
+// document ready, get token
 $(document).ready(function() {
     getToken();
 });
