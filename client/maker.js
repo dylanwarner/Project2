@@ -45,7 +45,8 @@ const NoteForm = (props) => {
 const ProfileWindow = (props) => {
     return (
         <div id="profileWindow">
-            <h2>Hi </h2>
+            <h3>Profile</h3>
+            <a id="changePassButton" class="nav-link nav-link-ltr" href="/maker">Change Password</a>
         </div>
     );
 }

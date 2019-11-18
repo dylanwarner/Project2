@@ -60,7 +60,11 @@ var NoteForm = function NoteForm(props) {
 var ProfileWindow = function ProfileWindow(props) {
   return React.createElement("div", {
     id: "profileWindow"
-  }, React.createElement("h2", null, "Hi "));
+  }, React.createElement("h3", null, "Profile"), React.createElement("a", {
+    id: "changePassButton",
+    "class": "nav-link nav-link-ltr",
+    href: "/maker"
+  }, "Change Password"));
 }; // function to create the add note window passing in csrf
 
 
